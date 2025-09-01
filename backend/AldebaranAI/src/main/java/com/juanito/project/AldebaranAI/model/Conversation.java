@@ -12,26 +12,26 @@ public class Conversation {
 
     @Id
     @GeneratedValue (strategy = GenerationType.AUTO)
-    private Long id;
+    private Long conversationId;
 
     @ManyToOne
     @JoinColumn (name = "user_id")
     private User user;
 
-    @Column (name = "title")
-    private String title;
+    @Column (name = "name")
+    private String name;
 
     @CreationTimestamp
     @Column (name = "created_at")
     private Date createdAt;
 
-    @OneToMany (mappedBy = "conversation", cascade = CascadeType.ALL)
+    @OneToMany (mappedBy = "conversation", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Messages> messagesList;
 
-    public Conversation(Long id, User user, String title, Date createdAt, List<Messages> messagesList) {
-        this.id = id;
+    public Conversation(Long conversationId, User user, String name, Date createdAt, List<Messages> messagesList) {
+        this.conversationId = conversationId;
         this.user = user;
-        this.title = title;
+        this.name = name;
         this.createdAt = createdAt;
         this.messagesList = messagesList;
     }
@@ -39,12 +39,12 @@ public class Conversation {
     public Conversation() {
     }
 
-    public Long getId() {
-        return id;
+    public Long getConversationId() {
+        return conversationId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setConversationId(Long conversationId) {
+        this.conversationId = conversationId;
     }
 
     public User getUser() {
@@ -55,12 +55,12 @@ public class Conversation {
         this.user = user;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Date getCreatedAt() {

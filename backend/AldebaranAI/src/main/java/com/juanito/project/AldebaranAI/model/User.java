@@ -8,7 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table (name = "user_table")
-public class User {
+public class User  {
 
     @Id
     @GeneratedValue (strategy = GenerationType.AUTO)
@@ -31,13 +31,17 @@ public class User {
     @Column (name = "created_at")
     private Date createdAt;
 
-    public User(Long id, String userName, String email, UserType userType, List<Conversation> conversationList, Date createdAt) {
+    @Column (name = "is_active")
+    private boolean isActive;
+
+    public User(Long id, String userName, String email, UserType userType, List<Conversation> conversationList, Date createdAt, boolean isActive) {
         this.id = id;
         this.userName = userName;
         this.email = email;
         this.userType = userType;
         this.conversationList = conversationList;
         this.createdAt = createdAt;
+        this.isActive = isActive;
     }
 
     public User() {
@@ -89,5 +93,13 @@ public class User {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }
