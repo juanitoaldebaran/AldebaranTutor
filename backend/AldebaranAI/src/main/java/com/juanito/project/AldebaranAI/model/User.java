@@ -1,14 +1,16 @@
 package com.juanito.project.AldebaranAI.model;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table (name = "user_table")
-public class User  {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue (strategy = GenerationType.AUTO)
@@ -19,6 +21,9 @@ public class User  {
 
     @Column (name = "email", unique = true)
     private String email;
+
+    @Column(name = "password")
+    private String password;
 
     @Column (name = "user_type")
     @Enumerated (EnumType.STRING)
@@ -34,12 +39,13 @@ public class User  {
     @Column (name = "is_active")
     private boolean isActive;
 
-    public User(Long id, String userName, String email, UserType userType, List<Conversation> conversationList, Date createdAt, boolean isActive) {
+    public User(Long id, String userName, String email, UserType userType, List<Conversation> conversationList, String password, Date createdAt, boolean isActive) {
         this.id = id;
         this.userName = userName;
         this.email = email;
         this.userType = userType;
         this.conversationList = conversationList;
+        this.password = password;
         this.createdAt = createdAt;
         this.isActive = isActive;
     }
@@ -51,32 +57,36 @@ public class User  {
         return id;
     }
 
-    public void setId(Long id) {
+    public User setId(Long id) {
         this.id = id;
+        return this;
     }
 
     public String getUserName() {
         return userName;
     }
 
-    public void setUserName(String userName) {
+    public User setUserName(String userName) {
         this.userName = userName;
+        return this;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public User setEmail(String email) {
         this.email = email;
+        return this;
     }
 
     public UserType getUserType() {
         return userType;
     }
 
-    public void setUserType(UserType userType) {
+    public User setUserType(UserType userType) {
         this.userType = userType;
+        return this;
     }
 
     public List<Conversation> getConversationList() {
@@ -87,19 +97,61 @@ public class User  {
         this.conversationList = conversationList;
     }
 
+    public User setPassword(String password) {
+        this.password = password;
+        return this;
+    }
+
     public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public User setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+        return this;
     }
 
     public boolean isActive() {
         return isActive;
     }
 
-    public void setActive(boolean active) {
-        isActive = active;
+    public User setActive(boolean active) {
+        this.isActive = active;
+        return this;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(userType.name()));
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return userName;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
