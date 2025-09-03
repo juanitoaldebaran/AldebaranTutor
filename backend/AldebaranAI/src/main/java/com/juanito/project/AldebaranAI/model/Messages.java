@@ -13,19 +13,19 @@ public class Messages {
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long messagesId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn (name = "conversation_id")
     private Conversation conversation;
 
-    @Column (name = "content")
+    @Column (name = "content", nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    @Column (name = "sender_type")
     @Enumerated (EnumType.STRING)
+    @Column (name = "sender_type", nullable = false)
     private SenderType senderType;
 
-    @CreationTimestamp
-    @Column (name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column (name = "created_at", nullable = false)
     private Date createdAt;
 
     @Column (name = "token_count")

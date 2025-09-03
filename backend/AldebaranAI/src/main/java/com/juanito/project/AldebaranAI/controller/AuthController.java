@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.juanito.project.AldebaranAI.model.User;
+
 @RestController
 public class AuthController {
     private final AuthService authService;
@@ -29,14 +30,17 @@ public class AuthController {
         try {
             User newUser = authService.RegisterUser(registerRequest);
 
-            return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+            // Return safe response without exposing password
+            UserResponse userResponse = new UserResponse(newUser);
+            return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
+
         } catch (RuntimeException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> loginUser(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
         try {
             User loginUser = authService.LoginUser(loginRequest);
             String jwtToken = jwtService.generateToken(loginUser);
@@ -48,10 +52,10 @@ public class AuthController {
                     .setExpiresIn(jwtService.getExpirationTime())
                     .setJwtToken(jwtToken);
 
-            return new ResponseEntity<>(loginResponse, HttpStatus.CREATED);
+            return ResponseEntity.ok(loginResponse);
+
         } catch (RuntimeException e) {
-            return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
-
 }

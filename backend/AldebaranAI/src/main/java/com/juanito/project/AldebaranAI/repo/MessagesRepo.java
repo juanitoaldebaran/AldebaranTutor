@@ -1,5 +1,6 @@
 package com.juanito.project.AldebaranAI.repo;
 
+import com.juanito.project.AldebaranAI.model.Conversation;
 import com.juanito.project.AldebaranAI.model.Messages;
 import com.juanito.project.AldebaranAI.model.SenderType;
 import org.springframework.data.domain.Page;
@@ -15,17 +16,13 @@ import java.util.List;
 @Repository
 public interface MessagesRepo extends JpaRepository<Messages, Long> {
 
-    List<Messages> findByConversationConversationIdOrderByCreatedAtAsc(Long conversationId);
-    List<Messages> findByConversationConversationIdOrderByCreatedAtDesc(Long conversationId);
+    List<Messages> findByConversation_ConversationIdOrderByCreatedAtAsc(Long conversationId);
 
-    Page<Messages> findByConversationConversationIdOrderByCreatedAtDesc(Long conversationId, Pageable pageable);
+    List<Messages> findByConversation_ConversationIdOrderByCreatedAtDesc(Long conversationId);
 
-    @Query("SELECT m FROM Messages m WHERE m.conversation.conversationId = :conversationId ORDER BY m.createdAt DESC")
-    List<Messages> findRecentMessages(@Param("conversationId") Long conversationId, Pageable pageable);
+    List<Messages> findByConversation_ConversationIdAndSenderType(Long conversationId, SenderType senderType);
 
-    List<Messages> findByConversationConversationIdAndSenderType(Long conversationId, SenderType senderType);
-
-    long countByConversationConversationId(Long conversationId);
+    Page<Messages> findByConversation_ConversationIdOrderByCreatedAtDesc(Long conversationId, Pageable pageable);
 
     @Query("SELECT SUM(m.tokenCount) FROM Messages m WHERE m.conversation.user.id = :userId " +
             "AND m.createdAt >= :since AND m.tokenCount IS NOT NULL")
@@ -39,4 +36,6 @@ public interface MessagesRepo extends JpaRepository<Messages, Long> {
             "AND LOWER(m.content) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
     List<Messages> searchUserMessages(@Param("userId") Long userId,
                                       @Param("searchTerm") String searchTerm);
+
+    long countByConversation_ConversationId(Long conversationId);
 }
