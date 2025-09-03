@@ -17,4 +17,3 @@ jwt:
 
 google:
   gemini-api-key: ${GEMINI_API_KEY}
-  gemini-url:

@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,44 +31,42 @@ public class JwtService {
         try {
             final Claims claims = extractAllClaims(jwtToken);
             return claimsResolver.apply(claims);
-        } catch (RuntimeException e) {
-            logger.error("Failed to extract claims");
-            throw new RuntimeException(e.getMessage());
+        } catch (Exception e) {
+            logger.error("Failed to extract claims: " + e.getMessage());
+            throw new RuntimeException("Failed to extract claims", e);
         }
     }
 
     public Claims extractAllClaims(String jwtToken) {
         try {
             return Jwts.parser()
-                    .setSigningKey(getSigningKey())
+                    .verifyWith(getSigningKey())
                     .build()
-                    .parseClaimsJws(jwtToken)
-                    .getBody();
-        } catch (RuntimeException e) {
-            logger.error("Failed to extract all claims");
-            throw new RuntimeException(e.getMessage());
+                    .parseSignedClaims(jwtToken)
+                    .getPayload();
+        } catch (Exception e) {
+            logger.error("Failed to extract all claims: " + e.getMessage());
+            throw new RuntimeException("Invalid JWT token", e);
         }
     }
 
     public Date extractExpiration(String jwtToken) {
         try {
             return extractClaims(jwtToken, Claims::getExpiration);
-        } catch (RuntimeException e) {
-            logger.error("Failed to extract expiration");
-            throw new RuntimeException(e.getMessage());
+        } catch (Exception e) {
+            logger.error("Failed to extract expiration: " + e.getMessage());
+            throw new RuntimeException("Failed to extract expiration", e);
         }
     }
 
     public String extractUsername(String jwtToken) {
         try {
             return extractClaims(jwtToken, Claims::getSubject);
-        } catch (RuntimeException e) {
-            logger.error("Failed to extract username");
-            throw new RuntimeException(e.getMessage());
+        } catch (Exception e) {
+            logger.error("Failed to extract username: " + e.getMessage());
+            throw new RuntimeException("Failed to extract username", e);
         }
     }
-
-
 
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
@@ -76,51 +74,51 @@ public class JwtService {
 
     public boolean isTokenExpired(String jwtToken) {
         try {
-            return extractExpiration(jwtToken).before(new Date(System.currentTimeMillis()));
-        } catch (RuntimeException e) {
-            logger.error("Failed to check if token expired");
-            throw new RuntimeException(e.getMessage());
+            return extractExpiration(jwtToken).before(new Date());
+        } catch (Exception e) {
+            logger.error("Failed to check if token expired: " + e.getMessage());
+            throw new RuntimeException("Failed to check token expiration", e);
         }
     }
 
     public boolean isTokenValid(UserDetails userDetails, String jwtToken) {
         try {
             String userName = extractUsername(jwtToken);
-
-            return userDetails.equals(userName) && !isTokenExpired(jwtToken);
-        } catch (RuntimeException e) {
-            logger.error("Failed to check if token valid");
-            throw new RuntimeException(e.getMessage());
+            return userDetails.getUsername().equals(userName) && !isTokenExpired(jwtToken);
+        } catch (Exception e) {
+            logger.error("Failed to check if token valid: " + e.getMessage());
+            return false; // Return false instead of throwing exception
         }
     }
 
     public String generateToken(Map<String, Object> claims, UserDetails userDetails) {
         return buildJwtToken(userDetails, claims);
     }
+
     public String buildJwtToken(UserDetails userDetails, Map<String, Object> claims) {
         try {
             String token = Jwts.builder()
-                    .setSubject(userDetails.getUsername())
-                    .setClaims(claims)
-                    .setIssuedAt(new Date(System.currentTimeMillis()))
-                    .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
+                    .subject(userDetails.getUsername())
+                    .claims(claims)
+                    .issuedAt(new Date(System.currentTimeMillis()))
+                    .expiration(new Date(System.currentTimeMillis() + expirationTime))
                     .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                     .compact();
-            logger.info("jwt token successfully created!");
+            logger.info("JWT token successfully created for user: " + userDetails.getUsername());
             return token;
-        } catch (RuntimeException e) {
-            logger.error("Failed to build jwt token");
-            throw new RuntimeException(e.getMessage());
+        } catch (Exception e) {
+            logger.error("Failed to build jwt token: " + e.getMessage());
+            throw new RuntimeException("Failed to build JWT token", e);
         }
     }
 
-    public Key getSigningKey() {
+    public SecretKey getSigningKey() {
         try {
-            byte[] byteKey = Decoders.BASE64.decode(jwtSecret);
-            return Keys.hmacShaKeyFor(byteKey);
-        } catch (RuntimeException e) {
-            logger.error("Failed to generate secret key");
-            throw new RuntimeException(e.getMessage());
+            byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
+            return Keys.hmacShaKeyFor(keyBytes);
+        } catch (Exception e) {
+            logger.error("Failed to generate secret key: " + e.getMessage());
+            throw new RuntimeException("Failed to generate secret key", e);
         }
     }
 
