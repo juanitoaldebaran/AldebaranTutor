@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ai/chat")
+@RequestMapping("/ai/conversation")
 public class GeminiAIController {
 
     private static final Logger logger = LoggerFactory.getLogger(GeminiAIController.class);
@@ -31,7 +31,7 @@ public class GeminiAIController {
         this.authenticationUtil = authenticationUtil;
     }
 
-    @PostMapping("/conversation/{conversationId}")
+    @PostMapping("/{conversationId}")
     public ResponseEntity<?> sendMessage(@RequestBody ChatRequest chatRequest, @PathVariable Long conversationId) {
         try {
             String userEmail = authenticationUtil.getCurrentEmail();
@@ -56,7 +56,7 @@ public class GeminiAIController {
         }
     }
 
-    @GetMapping("/conversation/{conversationId}")
+    @GetMapping("/{conversationId}")
     public ResponseEntity<?> getConversationMessages(@PathVariable Long conversationId) {
         try {
             String userEmail = authenticationUtil.getCurrentEmail();
@@ -80,7 +80,7 @@ public class GeminiAIController {
         }
     }
 
-    @GetMapping("/admin/all")
+    @GetMapping("/all")
     public ResponseEntity<?> getAllMessages() {
         try {
             List<MessageResponse> allMessages = geminiAIService.getAllMessages();

@@ -21,7 +21,8 @@ import java.util.stream.Collectors;
 public class GeminiAIService {
 
     private static final Logger logger = LoggerFactory.getLogger(GeminiAIService.class);
-    private static final String GEMINI_MODEL = "gemini-1.5-flash";
+
+        private static final String AI_GEMINI_MODEL = "gemini-2.5-flash";
 
     private final Client client;
     private final MessagesRepo messagesRepo;
@@ -42,6 +43,7 @@ public class GeminiAIService {
             Conversation conversation = conversationRepo.findById(conversationId)
                     .orElseThrow(() -> new RuntimeException("No conversation found with ID: " + conversationId));
 
+            ///Create User Message
             Messages userMessage = new Messages();
             userMessage.setConversation(conversation);
             userMessage.setContent(chatRequest.getMessage().trim());
@@ -51,23 +53,35 @@ public class GeminiAIService {
             messagesRepo.save(userMessage);
             logger.info("User message saved for conversation: {}", conversationId);
 
-            GenerateContentResponse aiResponse = generateAIResponse(chatRequest.getMessage());
 
-            if (aiResponse == null || aiResponse.text() == null || aiResponse.text().trim().isEmpty()) {
-                throw new RuntimeException("AI response is empty or null");
+            try {
+                GenerateContentResponse aiResponse = generateAIResponse(chatRequest.getMessage());
+
+                if (aiResponse != null && aiResponse.text() != null && !aiResponse.text().trim().isEmpty()) {
+                    Messages aiMessages = new Messages();
+                    aiMessages.setConversation(conversation);
+                    aiMessages.setContent(aiResponse.text().trim());
+                    aiMessages.setSenderType(SenderType.AI);
+                    aiMessages.setCreatedAt(new Date());
+
+                    messagesRepo.save(aiMessages);
+                    logger.info("AI Message saved for conversation: {}", conversationId);
+                } else {
+                    logger.warn("AI Response is empty or null: {}", conversationId);
+                }
+            } catch (Exception e) {
+                    Messages aiErrorMessages = new Messages();
+                    aiErrorMessages.setConversation(conversation);
+                    aiErrorMessages.setContent("AI Failed to generate response, Please try again");
+                    aiErrorMessages.setSenderType(SenderType.AI);
+                    aiErrorMessages.setCreatedAt(new Date());
+
+                    messagesRepo.save(aiErrorMessages);
+                    logger.info("AI Failed messages saved for conversation: {}", conversationId);
             }
 
-            Messages aiMessage = new Messages();
-            aiMessage.setConversation(conversation);
-            aiMessage.setContent(aiResponse.text().trim());
-            aiMessage.setSenderType(SenderType.AI);
-            aiMessage.setCreatedAt(new Date());
-
-            messagesRepo.save(aiMessage);
-            logger.info("AI message saved for conversation: {}", conversationId);
-
-            List<Messages> messages = messagesRepo.findByConversation_ConversationIdOrderByCreatedAtAsc(conversationId);
-            return messages.stream()
+            List<Messages> allMessages = messagesRepo.findByConversation_ConversationIdOrderByCreatedAtAsc(conversationId);
+            return allMessages.stream()
                     .map(m -> new MessageResponse(m.getContent(), m.getSenderType(), m.getCreatedAt()))
                     .collect(Collectors.toList());
 
@@ -90,7 +104,7 @@ public class GeminiAIService {
         for (int attempt = 1; attempt <= maxRetries; attempt++) {
             try {
                 long startTime = System.currentTimeMillis();
-                GenerateContentResponse response = client.models.generateContent(GEMINI_MODEL, message, null);
+                GenerateContentResponse response = client.models.generateContent(AI_GEMINI_MODEL, message, null);
                 long processingTime = System.currentTimeMillis() - startTime;
 
                 logger.info("AI response generated successfully (attempt {}, processing time: {}ms)",
@@ -107,7 +121,7 @@ public class GeminiAIService {
                 }
 
                 try {
-                    Thread.sleep(retryDelay * attempt); // Exponential backoff
+                    Thread.sleep(retryDelay * attempt);
                 } catch (InterruptedException ie) {
                     Thread.currentThread().interrupt();
                     throw new RuntimeException("Request interrupted", ie);
@@ -132,7 +146,6 @@ public class GeminiAIService {
 
     public List<MessageResponse> getMessageById(Long conversationId) {
         try {
-            // Verify conversation exists
             conversationRepo.findById(conversationId)
                     .orElseThrow(() -> new RuntimeException("No conversation found with ID: " + conversationId));
 

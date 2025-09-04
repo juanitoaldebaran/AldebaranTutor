@@ -87,7 +87,6 @@ public class ConversationService {
             User user = userRepo.findUserByEmail(userEmail)
                     .orElseThrow(() -> new RuntimeException("User not found with email: " + userEmail));
 
-            // Get user's conversations that match the search term
             List<Conversation> allUserConversations = conversationRepo.findByUser(user);
             return allUserConversations.stream()
                     .filter(conv -> conv.getName().toLowerCase().contains(searchTerm.toLowerCase()))
@@ -114,7 +113,6 @@ public class ConversationService {
         }
     }
 
-    // Admin-only methods (keep for admin functionality)
     public List<Conversation> getAllConversations() {
         try {
             return conversationRepo.findAll();

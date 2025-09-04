@@ -30,7 +30,6 @@ public class AuthController {
         try {
             User newUser = authService.RegisterUser(registerRequest);
 
-            // Return safe response without exposing password
             UserResponse userResponse = new UserResponse(newUser);
             return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
 
