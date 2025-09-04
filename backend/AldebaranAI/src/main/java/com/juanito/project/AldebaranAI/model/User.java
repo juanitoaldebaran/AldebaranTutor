@@ -2,6 +2,7 @@ package com.juanito.project.AldebaranAI.model;
 
 import java.util.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,6 +31,7 @@ public class User implements UserDetails {
     private UserType userType;
 
     @OneToMany (mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Conversation> conversationList;
 
     @CreationTimestamp

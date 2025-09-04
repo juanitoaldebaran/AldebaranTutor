@@ -1,6 +1,7 @@
 package com.juanito.project.AldebaranAI.controller;
 
 import com.juanito.project.AldebaranAI.dto.request.ConversationRequest;
+import com.juanito.project.AldebaranAI.dto.response.ConversationResponse;
 import com.juanito.project.AldebaranAI.model.Conversation;
 import com.juanito.project.AldebaranAI.service.ConversationService;
 import com.juanito.project.AldebaranAI.util.AuthenticationUtil;
@@ -8,10 +9,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/ai/conversations")
@@ -32,8 +33,9 @@ public class ConversationController {
         try {
             String userEmail = authenticationUtil.getCurrentEmail();
             Conversation newConversation = conversationService.createConversation(userEmail, conversationRequest);
-            logger.info("Conversation created successfully: {} for user: {}", newConversation.getName(), userEmail);
-            return ResponseEntity.status(HttpStatus.CREATED).body(newConversation);
+            ConversationResponse conversationResponse = new ConversationResponse(newConversation);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(conversationResponse);
         } catch (RuntimeException e) {
             logger.error("Failed to create conversation: {}", e.getMessage());
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
@@ -49,7 +51,12 @@ public class ConversationController {
         try {
             String userEmail = authenticationUtil.getCurrentEmail();
             List<Conversation> conversations = conversationService.getConversationsByUserEmail(userEmail);
-            return ResponseEntity.ok(conversations);
+
+            List<ConversationResponse> responses = conversations.stream()
+                    .map(ConversationResponse::new)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(responses);
         } catch (RuntimeException e) {
             logger.error("Failed to fetch user conversations: {}", e.getMessage());
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
@@ -65,7 +72,12 @@ public class ConversationController {
         try {
             String userEmail = authenticationUtil.getCurrentEmail();
             List<Conversation> conversations = conversationService.searchUserConversationsByName(userEmail, term);
-            return ResponseEntity.ok(conversations);
+
+            List<ConversationResponse> responses = conversations.stream()
+                    .map(ConversationResponse::new)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(responses);
         } catch (RuntimeException e) {
             logger.error("Failed to search conversations: {}", e.getMessage());
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
@@ -77,7 +89,6 @@ public class ConversationController {
     }
 
     @GetMapping("/admin/all")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAllConversations() {
         try {
             List<Conversation> allConversations = conversationService.getAllConversations();
