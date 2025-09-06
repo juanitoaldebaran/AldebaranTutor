@@ -1,6 +1,6 @@
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/Card/card";
-import { Input } from "@/components/Input/input";
-import { Button } from "@/components/Button/button";
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import type { LoginRequest } from "@/types/auth";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -22,7 +22,7 @@ const Login: React.FC = () => {
     const {login} = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
-    const fromPath = location.state?.fromPath?.pathname || "/";
+    const fromPath = location.state?.fromPath?.pathname || "/ai/conversations";
     const isFormValid = loginData.email && loginData.password;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,7 +54,7 @@ const Login: React.FC = () => {
             console.log("User successfully logged in");
             setTimeout(() => {
                 navigate(fromPath, { replace: true })
-            });
+            }, 2000);
         } catch (error: any) {
             showNotification("Failed to login to your account", "error");
             console.error(error?.response?.data?.message || "Failed to login to account");
@@ -65,7 +65,7 @@ const Login: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center">
+        <div className="min-h-screen w-full bg-black flex items-center justify-center">
             <Card className="w-full max-w-sm bg-white">
             <CardHeader className="text-center">
                  <CardTitle>Login</CardTitle>
@@ -109,7 +109,7 @@ const Login: React.FC = () => {
             <CardFooter className="flex flex-col justify-center items-center space-y-4">
                 <div className="flex space-x-2">
                     <p className="text-sm">Don't have an account?</p>
-                    <Link className="text-blue-600 underline text-sm" to={"/register"}>
+                    <Link className="underline text-sm" to={"/register"}>
                         Sign Up
                     </Link>
                 </div>

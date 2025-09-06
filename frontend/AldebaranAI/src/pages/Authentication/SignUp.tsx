@@ -1,6 +1,6 @@
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/Card/card";
-import { Input } from "@/components/Input/input";
-import { Button } from "@/components/Button/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import type { RegisterRequest } from "@/types/auth";
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -81,7 +81,7 @@ const SignUp: React.FC = () => {
             console.log("User successfully registered");
             setTimeout(() => {
                 navigate(fromPath, { replace: true });
-            }, 1500);
+            }, 2000);
         } catch (error: any) {
             showNotification("Failed to create an account", "error");
             console.error("Registration error:", error?.message || "Failed to register account");
@@ -91,7 +91,7 @@ const SignUp: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen flex justify-center items-center">
+        <div className="min-h-screen w-full bg-black flex justify-center items-center">
             <Card className="w-full max-w-sm bg-white">
                 <CardHeader className="text-center">
                     <CardTitle>Sign Up</CardTitle>
@@ -141,7 +141,7 @@ const SignUp: React.FC = () => {
                             <div className="grid gap-2">
                                 {confirmPassword && (
                                     <PasswordMatch 
-                                        message={isPasswordMatch ? "Passwords match" : "Passwords do not match"} 
+                                        message={isPasswordMatch ? "Password match" : "Password do not match"} 
                                         type={isPasswordMatch ? "success" : "error"}
                                     />
                                 )}
@@ -176,7 +176,7 @@ const SignUp: React.FC = () => {
                 <CardFooter className="flex flex-col justify-center items-center space-y-4">
                     <div className="flex space-x-2">
                         <p className="text-sm">Already have an account?</p>
-                        <Link className="text-blue-600 underline text-sm" to={"/login"}>
+                        <Link className="text-black underline text-sm" to={"/login"}>
                             Login
                         </Link>
                     </div>
