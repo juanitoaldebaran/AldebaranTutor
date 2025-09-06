@@ -16,16 +16,16 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ai/conversation")
-public class GeminiAIController {
+@RequestMapping("/ai/conversations")
+public class MessageController {
 
-    private static final Logger logger = LoggerFactory.getLogger(GeminiAIController.class);
+    private static final Logger logger = LoggerFactory.getLogger(MessageController.class);
 
     private final GeminiAIService geminiAIService;
     private final ConversationService conversationService;
     private final AuthenticationUtil authenticationUtil;
 
-    public GeminiAIController(GeminiAIService geminiAIService, ConversationService conversationService, AuthenticationUtil authenticationUtil) {
+    public MessageController(GeminiAIService geminiAIService, ConversationService conversationService, AuthenticationUtil authenticationUtil) {
         this.geminiAIService = geminiAIService;
         this.conversationService = conversationService;
         this.authenticationUtil = authenticationUtil;

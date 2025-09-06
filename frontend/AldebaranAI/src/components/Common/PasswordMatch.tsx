@@ -4,14 +4,13 @@ interface PasswordMatchProps {
 }
 
 const PasswordMatch: React.FC<PasswordMatchProps> = ({type, message}) => {
-    const baseClass = "mt-1";
     const typeClass = {
         "success": "text-green-600",
         "error": "text-red-600"
     }
 
     return (
-        <div className={`${baseClass} ${typeClass[type]}`}>
+        <div className={`${typeClass[type]}`}>
             {message}
         </div>
     )
