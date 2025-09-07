@@ -1,3 +1,4 @@
+import LoadingSpinner from "@/components/Common/LoadingSpinner";
 import { useAuthContext } from "@/context/AuthContext";
 import { Navigate, useLocation, Outlet } from "react-router-dom";
 
@@ -6,8 +7,12 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute = ({redirectPath = "/login"}: ProtectedRouteProps) => {
-    const {isAuthenticated} = useAuthContext();
+    const {isAuthenticated, isLoading} = useAuthContext();
     const location = useLocation();
+
+    {isLoading && (
+        <LoadingSpinner></LoadingSpinner>
+    )}
 
     if (!isAuthenticated) {
         return <Navigate to={redirectPath} state={{fromPath: location}}></Navigate>
