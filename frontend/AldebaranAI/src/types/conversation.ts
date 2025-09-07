@@ -11,7 +11,7 @@ export interface Conversation {
 
 export interface ChatRequest {
     message: string;
-    createdAt: string;
+    createdAt: number;
 }
 
 export interface ConversationRequest {
@@ -27,5 +27,5 @@ export interface ConversationResponse {
 export interface MessageResponse {
     content: string;
     senderType: string;
-    createdAt: string;
+    createdAt: number;
 }
