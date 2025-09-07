@@ -46,4 +46,5 @@ export interface AuthContextType {
     getJwtToken: () => string | null;
     logout: () => void;
     isAuthenticated: boolean;
+    isLoading: boolean;
 }

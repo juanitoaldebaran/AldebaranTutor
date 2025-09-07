@@ -1,3 +1,14 @@
+import type { User } from "./auth";
+import type { Messages } from "./messages";
+
+export interface Conversation {
+    conversationId: number;
+    user: User;
+    name: string;
+    createdAt: number;
+    messagesList: Messages[];
+}
+
 export interface ChatRequest {
     message: string;
     createdAt: string;

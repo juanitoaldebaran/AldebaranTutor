@@ -5,11 +5,12 @@ import type { AuthContextType, LoginRequest, LoginResponse, RegisterRequest, Use
 const useAuth = (): AuthContextType => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [user, setUser] = useState<UserResponse | null>(null);
+    const [isLoading, setIsLoading] = useState(true); 
 
     useEffect(() => {
         const jwtToken = authService.getJwtToken();
         const storedUser = localStorage.getItem("user");
-
+        
         if (storedUser && jwtToken) {
             try {
                 const parsedUser = JSON.parse(storedUser) as UserResponse;
@@ -23,14 +24,14 @@ const useAuth = (): AuthContextType => {
                 setUser(null);
             }
         } else {
-            localStorage.removeItem("user");
-            localStorage.removeItem("jwtToken");
             setIsAuthenticated(false);
             setUser(null);
         }
+        
+        setIsLoading(false);
     }, []);
 
-    const login =  async (loginRequest: LoginRequest): Promise<LoginResponse> => {
+    const login = async (loginRequest: LoginRequest): Promise<LoginResponse> => {
         try {
             const response: LoginResponse = await authService.loginUser(loginRequest);
 
@@ -51,7 +52,7 @@ const useAuth = (): AuthContextType => {
             throw error;
         }
     }
-    
+
     const register = async (registerRequest: RegisterRequest): Promise<UserResponse> => {
         try {
             const response: UserResponse = await authService.registerUser(registerRequest);
@@ -82,7 +83,8 @@ const useAuth = (): AuthContextType => {
         logout,
         getJwtToken,
         isAuthenticated,
-        user
+        user,
+        isLoading
     }
 };
 
