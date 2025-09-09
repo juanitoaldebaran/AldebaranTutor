@@ -71,14 +71,11 @@ export function ChatInterface({ className }: ChatInterfaceProps) {
         chatRequest, 
         parseInt(conversationId)
       );
-      
-      // Your backend returns all messages, so replace the entire list
       setMessages(responseMessages);
       
       console.log("Message sent successfully");
     } catch (error: any) {
       console.error("Failed to send message:", error?.message);
-      // Restore the message if sending failed
       setNewMessage(userMessage);
     } finally {
       setIsSending(false);
@@ -107,7 +104,6 @@ export function ChatInterface({ className }: ChatInterfaceProps) {
     scrollToBottom();
   }, [messages]);
 
-  // Show welcome screen when on /ai/conversations (no conversationId)
   if (!conversationId) {
     return (
       <div className={`flex-1 flex items-center justify-center bg-gray-50 ${className}`}>
