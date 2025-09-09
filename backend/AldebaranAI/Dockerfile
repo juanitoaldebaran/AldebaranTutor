@@ -1,17 +1,16 @@
-FROM eclipse-temurin:17-jdk
+FROM maven:3.9.6-eclipse-temurin-17 AS build
+WORKDIR /workspace
 
-WORKDIR /app
-
-COPY mvnw pom.xml ./
+COPY pom.xml mvnw ./
 COPY .mvn .mvn
-COPY src src
+RUN ./mvnw -B dependency:go-offline
 
-RUN chmod +x mvnw
+COPY src ./src
+RUN ./mvnw -B -DskipTests package
 
-RUN ./mvnw clean package -DskipTests
+FROM eclipse-temurin:17-jre-jammy
+WORKDIR /app
+COPY --from=build /workspace/target/*.jar app.jar
 
-COPY target/*.jar app.jar
-
-EXPOSE 8080
-
-ENTRYPOINT ["java","-jar","app.jar"]
+ENV JAVA_OPTS=""
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar /app/app.jar"]
