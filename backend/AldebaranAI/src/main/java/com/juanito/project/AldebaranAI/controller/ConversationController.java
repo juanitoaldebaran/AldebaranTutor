@@ -2,6 +2,7 @@ package com.juanito.project.AldebaranAI.controller;
 
 import com.juanito.project.AldebaranAI.dto.request.ConversationRequest;
 import com.juanito.project.AldebaranAI.dto.response.ConversationResponse;
+import com.juanito.project.AldebaranAI.dto.response.ErrorResponse;
 import com.juanito.project.AldebaranAI.model.Conversation;
 import com.juanito.project.AldebaranAI.service.ConversationService;
 import com.juanito.project.AldebaranAI.util.AuthenticationUtil;
@@ -22,6 +23,7 @@ public class ConversationController {
 
     private final ConversationService conversationService;
     private final AuthenticationUtil authenticationUtil;
+
 
     public ConversationController(ConversationService conversationService, AuthenticationUtil authenticationUtil) {
         this.conversationService = conversationService;
@@ -57,6 +59,7 @@ public class ConversationController {
                     .collect(Collectors.toList());
 
             return ResponseEntity.ok(responses);
+
         } catch (RuntimeException e) {
             logger.error("Failed to fetch user conversations: {}", e.getMessage());
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
@@ -100,18 +103,5 @@ public class ConversationController {
         }
     }
 
-    public static class ErrorResponse {
-        private String message;
-        private long timestamp;
 
-        public ErrorResponse(String message) {
-            this.message = message;
-            this.timestamp = System.currentTimeMillis();
-        }
-
-        public String getMessage() { return message; }
-        public void setMessage(String message) { this.message = message; }
-        public long getTimestamp() { return timestamp; }
-        public void setTimestamp(long timestamp) { this.timestamp = timestamp; }
-    }
 }
