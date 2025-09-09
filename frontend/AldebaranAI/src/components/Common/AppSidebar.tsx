@@ -50,18 +50,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const createNewMessage = async () => {
         setIsLoading(true);
         try {
-            // Create conversation with a default first message
             const conversationRequest: ConversationRequest = {
                 firstMessage: "Hello! I'd like to start a new conversation.",
             };
 
             const newConversationResponse = await conversationService.createConversation(conversationRequest);
             
-            // Update the conversation list
             setConversationList(prev => [...prev, newConversationResponse]);
             setFilteredConversations(prev => [...prev, newConversationResponse]);
             
-            // Navigate to the new conversation's messages page
             navigate(`/ai/conversations/${newConversationResponse.conversationId}/messages`);
             
             console.log("Successfully created new conversation and navigated to messages");
@@ -85,18 +82,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         }
 
         try {
-            // First try local filtering for better UX
             const localFiltered = conversationList.filter(conversation =>
                 conversation.name.toLowerCase().includes(term.toLowerCase())
             );
             setFilteredConversations(localFiltered);
-
-            // Optional: Also search on server if you want more comprehensive search
-            // const searchResults = await conversationService.searchUserConversation(term);
-            // setFilteredConversations(searchResults);
         } catch (error: any) {
             console.error("Search failed:", error?.message);
-            // Fall back to local search if server search fails
             const localFiltered = conversationList.filter(conversation =>
                 conversation.name.toLowerCase().includes(term.toLowerCase())
             );
