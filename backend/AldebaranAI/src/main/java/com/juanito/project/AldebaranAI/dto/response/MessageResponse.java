@@ -1,7 +1,6 @@
 package com.juanito.project.AldebaranAI.dto.response;
 
 import com.juanito.project.AldebaranAI.model.SenderType;
-
 import java.util.Date;
 
 public class MessageResponse {
@@ -14,7 +13,6 @@ public class MessageResponse {
         this.senderType = senderType;
         this.createdAt = createdAt;
     }
-
 
     public MessageResponse() {
     }

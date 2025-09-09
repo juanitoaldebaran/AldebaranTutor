@@ -1,6 +1,7 @@
 package com.juanito.project.AldebaranAI.controller;
 
 import com.juanito.project.AldebaranAI.dto.request.ChatRequest;
+import com.juanito.project.AldebaranAI.dto.response.ErrorResponse;
 import com.juanito.project.AldebaranAI.dto.response.MessageResponse;
 import com.juanito.project.AldebaranAI.model.SenderType;
 import com.juanito.project.AldebaranAI.service.ConversationService;
@@ -16,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ai/conversations")
+@RequestMapping("/ai/conversations/{conversationId}/messages")
 public class MessageController {
 
     private static final Logger logger = LoggerFactory.getLogger(MessageController.class);
@@ -31,7 +32,7 @@ public class MessageController {
         this.authenticationUtil = authenticationUtil;
     }
 
-    @PostMapping("/{conversationId}")
+    @PostMapping
     public ResponseEntity<?> sendMessage(@RequestBody ChatRequest chatRequest, @PathVariable Long conversationId) {
         try {
             String userEmail = authenticationUtil.getCurrentEmail();
@@ -56,7 +57,7 @@ public class MessageController {
         }
     }
 
-    @GetMapping("/{conversationId}")
+    @GetMapping
     public ResponseEntity<?> getConversationMessages(@PathVariable Long conversationId) {
         try {
             String userEmail = authenticationUtil.getCurrentEmail();
@@ -92,18 +93,4 @@ public class MessageController {
         }
     }
 
-    public static class ErrorResponse {
-        private String message;
-        private long timestamp;
-
-        public ErrorResponse(String message) {
-            this.message = message;
-            this.timestamp = System.currentTimeMillis();
-        }
-
-        public String getMessage() { return message; }
-        public void setMessage(String message) { this.message = message; }
-        public long getTimestamp() { return timestamp; }
-        public void setTimestamp(long timestamp) { this.timestamp = timestamp; }
-    }
 }

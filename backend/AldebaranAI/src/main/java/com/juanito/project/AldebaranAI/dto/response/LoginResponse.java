@@ -3,7 +3,6 @@ package com.juanito.project.AldebaranAI.dto.response;
 public class LoginResponse {
     private String jwtToken;
     private long expiresIn;
-
     private UserResponse userResponse;
 
     public LoginResponse(String jwtToken, long expiresIn) {

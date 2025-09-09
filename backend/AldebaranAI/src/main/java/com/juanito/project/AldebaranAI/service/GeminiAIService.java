@@ -53,7 +53,7 @@ public class GeminiAIService {
             messagesRepo.save(userMessage);
             logger.info("User message saved for conversation: {}", conversationId);
 
-
+            ///Create AI Message
             try {
                 GenerateContentResponse aiResponse = generateAIResponse(chatRequest.getMessage());
 

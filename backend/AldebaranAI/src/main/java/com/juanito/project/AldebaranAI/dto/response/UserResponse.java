@@ -7,12 +7,12 @@ import java.util.Date;
 public class UserResponse {
     private String userName;
     private String email;
-    private Date loginAt;
+    private Date createdAt;
 
     public UserResponse(User user) {
         this.userName = user.getUserName();
         this.email = user.getEmail();
-        this.loginAt = user.getCreatedAt();
+        this.createdAt = user.getCreatedAt();
     }
 
     public UserResponse() {
@@ -36,12 +36,12 @@ public class UserResponse {
         return this;
     }
 
-    public Date getLoginAt() {
-        return loginAt;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public UserResponse setLoginAt(Date loginAt) {
-        this.loginAt = loginAt;
+    public UserResponse setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
         return this;
     }
 }
