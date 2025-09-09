@@ -1,6 +1,6 @@
 import React from "react";
 import { AppSidebar } from "@/components/Common/AppSidebar";
-import { ChatInterface } from "@/components/Common/ChatInterface"; // Adjust path as needed
+import {ChatInterface} from "@/components/Common/ChatInterface";
 import {
   SidebarInset,
   SidebarProvider,
