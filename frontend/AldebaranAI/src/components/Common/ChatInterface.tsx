@@ -46,7 +46,7 @@ export function ChatInterface({ className }: ChatInterfaceProps) {
     try {
       const conversationMessages = await messageService.getConversationMessages(id);
       setMessages(conversationMessages);
-      console.log("Successfully fetched conversation messages");
+      console.log("Successfully get conversation messages");
     } catch (error: any) {
       console.error("Failed to fetch messages:", error?.message);
     } finally {
@@ -73,9 +73,9 @@ export function ChatInterface({ className }: ChatInterfaceProps) {
       );
       setMessages(responseMessages);
       
-      console.log("Message sent successfully");
+      console.log("Message has been sent successfully");
     } catch (error: any) {
-      console.error("Failed to send message:", error?.message);
+      console.error("Error occurs to send message:", error?.message);
       setNewMessage(userMessage);
     } finally {
       setIsSending(false);
