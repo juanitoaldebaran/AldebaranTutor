@@ -1,4 +1,4 @@
-# AldebaranAI
+# AldebaranTutor
 
-AldebaranAI is an AI chatbot powered by GeminiAI API model 1.5 flash
+AldebaranTutor is an AI online learning platform for students to enhance Finance, Tech, and Engineering sectors
 
