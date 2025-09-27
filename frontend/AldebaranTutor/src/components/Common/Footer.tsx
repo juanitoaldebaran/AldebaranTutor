@@ -1,15 +1,15 @@
-import { ArrowRight, Award, Badge, Globe, Rocket, Shield, Star } from "lucide-react";
+import { Award,  Globe, Shield, Star } from "lucide-react";
 import type React from "react";
-import { Button } from "../ui/button";
+import { Link } from "react-router-dom";
 
 const Footer: React.FC = () => {
     return (
         
         <footer className="relative border-t border-gray-800 bg-gray-900/30 backdrop-blur-xl">
             <div className="max-w-7xl mx-auto px-6 py-16">
-                {/* Main Footer Content */}
+
             <div className="text-center mb-12">
-                {/* Logo and Brand */}
+
                 <div className="flex items-center justify-center gap-4 mb-6">
                 <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
                     <Star className="w-6 h-6 text-white" />
@@ -22,23 +22,18 @@ const Footer: React.FC = () => {
                 </div>
                 </div>
 
-                {/* Mission Statement */}
                 <p className="text-lg text-gray-300 max-w-2xl mx-auto mb-8 leading-relaxed">
                 Empowering the next generation of tech professionals through intelligent, 
                 adaptive learning experiences in Computer Science, Finance, and Engineering.
                 </p>
 
-                {/* Call to Action */}
                 <div className="mb-12">
-                <Button 
-                    size="lg"
+                <Link 
+                    to={"/learn"}
                     className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold px-12 py-4 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/25 group"
-                    onClick={() => alert('Redirecting to learning dashboard...')}
                 >
-                    <Rocket className="w-5 h-5 mr-3 group-hover:rotate-12 transition-transform duration-300" />
                     Start Learning
-                    <ArrowRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform duration-300" />
-                </Button>
+                </Link>
                 </div>
 
                 <div className="pt-8 border-t border-gray-800">
@@ -65,7 +60,7 @@ const Footer: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Decorative Elements */}
+
                 <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent">
                 </div>
                 </div>
