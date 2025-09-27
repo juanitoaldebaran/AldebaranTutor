@@ -1,19 +1,22 @@
 import Navbar from "@/components/Common/Navbar";
 import type React from "react";
-import { motion } from "framer-motion";
-import { ArrowRight, Brain, Clock, Shield, Trophy } from "lucide-react";
+import { color, motion } from "framer-motion";
+import { Brain, Clock, Code, Settings, Shield, Target, TrendingUp, Trophy } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Common/Footer";
+
 
 const Home: React.FC = () => {
 
     const learningSectors = [
         {
-            "id": "CS",
-            "name": "Computer Science",
-            "description": "Master algorithms, system designs, data structures and programming fundamentals with AI-powered adaptive learning",
-            "icon": "💻",
-            "skills": [
+            id: "CS",
+            name: "Computer Science",
+            description: "Master algorithms, system designs, data structures and programming fundamentals with AI-powered adaptive learning",
+            icon: Code,
+            bgColor: "from-blue-500/10 to-cyan-500/10",
+            color: "from-blue-500 to-cyan-500",
+            skills: [
                "Data Structures", 
                "System Designs",
                "AI/ML",
@@ -21,11 +24,13 @@ const Home: React.FC = () => {
             ]
         }, 
         {
-            "id": "FIN",
-            "name": "Finance",
-            "description": "Excel in financial modelling, investment analysis, risk management, and quantitive finance concepts",
-            "icon": "📈",
-            "skills": [
+            id: "FIN",
+            name: "Finance",
+            description: "Excel in financial modelling, investment analysis, risk management, and quantitive finance concepts",
+            icon: TrendingUp,
+            bgColor: "from-emerald-500/10 to-green-500/10",
+            color: "from-emerald-500/10 to-green-500/10",
+            skills: [
                "Excel VBA", 
                "Financial Modelling",
                "Investment Analysis",
@@ -33,11 +38,13 @@ const Home: React.FC = () => {
             ]
         }, 
         {
-            "id": "ENG",
-            "name": "Engineering",
-            "description": "Strengthen your foundation in mechanical, civil, and software engineering principles",
-            "icon": "⚙️",
-            "skills": [
+            id: "ENG",
+            name: "Engineering",
+            description: "Strengthen your foundation in mechanical, civil, and software engineering principles",
+            icon: Settings,
+            bgColor: "from-orange-500/10 to-red-500/10",
+            color: "from-orange-500 to-red-500",
+            skills: [
                 "Engineering Design",
                 "Principle of Engineering",
                 "CAD Design",
@@ -46,6 +53,31 @@ const Home: React.FC = () => {
         }
     ];
 
+    const features = [
+        {
+            icon : Brain,
+            title: "AI-Powered Adaptive Learning",
+            description: "Machine learning altgorithm that adapt to your learning style",
+            color: "blue"
+        }, 
+        {
+            icon: Clock,
+            title: "Advanced Analytics Dashboard",
+            description: "Real-time insight into your learning progress, and performance metrics",
+            color: "purple"
+        }, 
+        {
+            icon: Trophy,
+            title: "Personalized Learnig Paths",
+            description: "Customized curriculum based on your goals and current skill levels",
+            color: "green"
+        }, {
+            icon: Shield,
+            title: "Gamified Experience",
+            description: "Earn badges, compete with peers, and track your achievements",
+            color: "yellow"
+        }
+    ];
 
     return (
         <div className="min-h-screen bg-black">
@@ -55,7 +87,7 @@ const Home: React.FC = () => {
             {/*Hero Section*/}
              <motion.section 
                 id="hero"
-                className="min-h-screen flex items-center bg-black"
+                className="min-h-screen flex items-center"
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1 }}
@@ -113,61 +145,77 @@ const Home: React.FC = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.8 }}
             >
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 className="text-5xl font-semibold text-center text-white mb-8 mt-10">
-                    Our
-                    <span className="ml-4 bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                         Learning Sectors
-                    </span>
-                </h2>
-                <h3 className="text-3xl font-semibold text-gray-200 text-center">
-                    Our learning content covers the most in demand modules in today's technology driven world
-                </h3>
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="text-center mb-16">
+                        <h2 className="text-5xl md:text-6xl font-bold text-white mb-6">
+                            Our Learning
+                            <span className="ml-4 bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                                Sectors
+                            </span>
+                        </h2>
+                        <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                            Dive deep into the most in-demand skills in today's technology-driven world
+                        </p>
+                    </div>
 
-                <div className="grid grid-cols-1 gap-8 mt-12">
-                    {learningSectors.map((service, idx) => (
-                    <motion.div 
-                        key={service.id}
-                        initial={{ opacity: 0, y: 40 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: idx * 0.2 }}
-                        className="flex flex-col  text-left cursor-pointer border-t-1 border-purple-600  p-8 gap-8 shadow-md rounded-lg bg-gray-900/50 hover:shadow-xl hover:scale-102 transition-all min-h-[320px] text-white"
-                    >       
-                            <h1 className="text-8xl">
-                                {service.icon}
-                            </h1>
-                            <h2 className="text-[40px] font-bold  rounded-lg">
-                                {service.name}
-                            </h2>
-                            <h3 className="text-2xl font-light">
-                                {service.description}
-                            </h3>
-                            <h4 className="font-bold text-2xl">
-                                🎯 Key Skills
-                            </h4>
-                            <div className="grid grid-cols-2 gap-4">
-                                {service.skills.map((skill, index) => (
-                                    <div
-                                    key={index}
-                                    className="flex items-center p-6 text-sm border-1 border-bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-gray-800/30 text-gray-100 rounded-lg"
-                                    >
-                                        ✅ {skill}
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        {learningSectors.map((sector) => (
+                            <div 
+                                key={sector.id}
+                                className="group relative bg-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-8 hover:border-gray-600/50 transition-all duration-500 hover:scale-105 hover:shadow-2xl"
+                            >
+                                {/* Gradient background on hover */}
+                                <div className={`absolute inset-0 bg-gradient-to-br ${sector.bgColor} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl`}></div>
+                                
+                                <div className="relative z-10">
+                                    {/* Icon */}
+                                    <div className={`w-16 h-16 bg-gradient-to-r ${sector.color} rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                                        <sector.icon className="w-8 h-8 text-white" />
                                     </div>
-                                ))}
+
+                                    {/* Title */}
+                                    <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-white transition-colors">
+                                        {sector.name}
+                                    </h3>
+
+                                    {/* Description */}
+                                    <p className="text-gray-300 mb-6 leading-relaxed">
+                                        {sector.description}
+                                    </p>
+
+                                    {/* Skills */}
+                                    <div className="mb-8">
+                                        <h4 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+                                            <Target className="w-5 h-5 text-purple-400" />
+                                            Key Skills
+                                        </h4>
+                                        <div className="grid grid-cols-2 gap-2">
+                                            {sector.skills.map((skill, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="flex items-center gap-2 p-3 text-sm bg-gray-800/50 border border-gray-700/50 text-gray-200 rounded-lg hover:bg-gray-700/50 transition-colors"
+                                                >
+                                                    <div className={`w-2 h-2 bg-gradient-to-r ${sector.color} rounded-full`}></div>
+                                                    {skill}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* CTA Button */}
+                                    <Link to={"/learn"} className={`w-full bg-gradient-to-r ${sector.color} hover:opacity-90 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 hover:shadow-lg group-hover:scale-105`}>
+                                        Get Started
+                                    </Link>
+                                </div>
                             </div>
-                            <Link to={'/learn'} className="bg-purple-600 hover:bg-purple-800 duration-200 p-4 rounded-lg shadow-lg text-center font-bold text-[20px]">
-                                Get Started
-                            </Link>
-                    </motion.div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
                 </div>
             </motion.section>
 
             {/* Why Choose Us Section */}
             <motion.section 
-                id=""
+                id="choose-us"
                 className="min-h-screen py-40 border-bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400"
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -181,24 +229,29 @@ const Home: React.FC = () => {
                          Us?
                     </span>
                 </h2>
-                <h3 className="text-3xl font-semibold text-gray-200 text-center">
-                    Our learning content covers the most in demand modules in today's technology driven world
-                </h3>
-
-                <div className="grid grid-cols-1 gap-8 mt-12">
-                    {learningSectors.map((service, idx) => (
-                    <motion.div 
-                        key={service.id}
-                        initial={{ opacity: 0, y: 40 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: idx * 0.2 }}
-                        className="flex flex-col  text-left cursor-pointer border-t-1 border-purple-600  p-8 gap-8 shadow-md rounded-lg bg-gray-900/50 hover:shadow-xl hover:scale-102 transition-all min-h-[320px] text-white"
-                    >       
-                        
-                    </motion.div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 shadow-xl">
+                    {features.map((badge, index) => (
+                        <div
+                        key={index}
+                        className="flex items-center gap-4 bg-gray-900/50 backdrop-blur-sm border-gray-700/50 rounded-2xl p-8 hover:border-gray-600/50 transition-all duration-500 hover:scale-105 hover:shadow-2xl"
+                        >
+                            <div className="bg-gray-800 p-4 rounded-lg">
+                                <badge.icon className={`w-10 h-10 text-${badge.color}-400`} />
+                            </div>
+                            <div>
+                                <h2 className="text-white font-bold text-2xl">
+                                    {badge.title}
+                                </h2>
+                                <p className="text-xl text-white">
+                                    {badge.description}
+                                </p>
+                            </div>
+                            
+                        </div>   
                     ))}
                 </div>
+                
                 </div>
             </motion.section>
             
