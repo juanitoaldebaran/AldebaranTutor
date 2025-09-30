@@ -22,7 +22,7 @@ const Login: React.FC = () => {
     const {login} = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
-    const fromPath = location.state?.fromPath?.pathname || "/ai/conversations";
+    const fromPath = location.state?.fromPath?.pathname || "/";
     const isFormValid = loginData.email && loginData.password;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
