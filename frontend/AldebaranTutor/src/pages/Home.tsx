@@ -1,6 +1,6 @@
 import Navbar from "@/components/Common/Navbar";
 import type React from "react";
-import { color, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { Brain, Clock, Code, Settings, Shield, Target, TrendingUp, Trophy } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Common/Footer";
@@ -92,7 +92,7 @@ const Home: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1 }}
             >
-                <div className="max-w-6xl mx-auto p-6 flex flex-col items-center justify-center gap-4">
+                <div className="mt-10 max-w-6xl mx-auto p-6 flex flex-col items-center justify-center gap-4">
                     <span className="bg-gradient-to-r from-purple-500/20 to-blue-500/20 border-purple-500/30 text-purple-300 px-4 py-2 rounded-lg">
                         ⚡️ Now Powered with ML model and AI tools
                     </span>
