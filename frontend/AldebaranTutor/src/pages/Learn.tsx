@@ -59,7 +59,7 @@ const Learn: React.FC = () => {
     ];
 
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen bg-black">
             {/*Navbar User*/}
             <Navbar />
 

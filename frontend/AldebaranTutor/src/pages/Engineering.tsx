@@ -1,27 +1,11 @@
-import CollapsibleSidebar from "@/components/Common/CollapsibleSidebar";
-import ContentDisplay from "@/components/Common/ContentDisplay";
 import Footer from "@/components/Common/Footer";
 import Navbar from "@/components/Common/Navbar";
-import { engineeringCourses } from "@/data/financeCourses";
-import type { Course, Section, SelectedContent } from "@/types/course";
-import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { motion } from "framer-motion";
 import type React from "react";
-import { useState } from "react";
 import { Link } from "react-router-dom";
 motion
 
 const Engineering: React.FC = () => {
-     const [selectedContent, setSelectedContent] = useState<SelectedContent | null>(null);
-
-    const handleSectionSelect = ( course: Course, section: Section,) => {
-        setSelectedContent({course, section})
-    };
-
-    const handleStartQuiz = () => {
-
-    };
-
     return (
         <div className="min-h-screen">
             <Navbar />
@@ -49,36 +33,6 @@ const Engineering: React.FC = () => {
                     <Link to={"/quiz/engineering"} className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-white p-3 rounded-lg">
                         Start Quiz Now 🚀
                     </Link>
-                </div>
-
-                <div className="flex items-center min-h-[calc(100vh-200px)] max-w-7xl p-4 rounded-lg bg-black border-1 mt-10">
-                    <div className="flex flex-col items-center justify-center gap-2">
-                        <h1 className="text-white text-3xl">
-                            Select Learning Modules
-                        </h1>
-                        <CollapsibleSidebar 
-                        courses={engineeringCourses}
-                        onSectionSelect={handleSectionSelect}
-                        />
-                    </div>
-                    <div>
-                        <ScrollArea className="h-full">
-                        <motion.div 
-                            className="p-4 sm:p-8"
-                            key={selectedContent ? selectedContent.section.name : "welcome"}
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <ContentDisplay
-                                selectedContent={selectedContent}
-                                welcomeTitle="Start Your Engineering Journey"
-                                welcomeSubtitle="Select a topic from the sidebar to view the curriculum."
-                                onStartQuiz={handleStartQuiz}
-                            />
-                        </motion.div>
-                    </ScrollArea>
-                    </div>
                 </div>
                
             </motion.section>

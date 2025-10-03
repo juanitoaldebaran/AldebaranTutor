@@ -4,11 +4,11 @@ import type React from "react";
 import { NavLink } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
-import {  LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 
 const navLinks = [
     {
-        name: "Start Learning",
+        name: "Learn",
         pathname: "/learn",
     },
     {
@@ -40,7 +40,7 @@ const Navbar: React.FC = () => {
     const {user, isAuthenticated, logout} = useAuth();
 
     return (
-        <div className="fixed z-50 w-full bg-black">
+        <nav className="fixed top-0 left-0 right-0 z-50 w-full bg-black shadow-lg border-b-2 border-gray-900/50">
             <div className="flex p-4 items-center justify-between text-white">
                 {/*Logo AldebaranTutor*/}
                 <Link to={"/"} className="font-light text-[28px]">
@@ -53,15 +53,15 @@ const Navbar: React.FC = () => {
                             <DropdownMenuTrigger asChild>
                                 <Button className="text-white cursor-pointer">{user?.userName.charAt(0)}</Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="start" className="flex flex-col gap-2 mt-2">
-                                <DropdownMenuLabel>
+                            <DropdownMenuContent align="start" className="flex flex-col gap-2 mt-2 bg-gray-900 border border-gray-700 rounded-lg p-2 z-50">
+                                <DropdownMenuLabel className="text-white px-2">
                                     {user?.email}
                                 </DropdownMenuLabel>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem onClick={logout}>
-                                    <div className="flex gap-2">
+                                <DropdownMenuSeparator className="bg-gray-700 h-px" />
+                                <DropdownMenuItem onClick={logout} className="cursor-pointer text-white hover:bg-gray-800 rounded px-2 py-1">
+                                    <div className="flex gap-2 items-center">
                                         Logout
-                                        <LogOut />
+                                        <LogOut size={16} />
                                     </div>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
@@ -70,7 +70,7 @@ const Navbar: React.FC = () => {
                         <div>
                             <Link 
                             to={"/login"}
-                            className="w-0 py-2 px-3 hover:border-b-2 w-full duration-100"
+                            className="py-2 px-3 hover:border-b-2 duration-100"
                             >
                                 Create an account
                             </Link>
@@ -91,7 +91,7 @@ const Navbar: React.FC = () => {
                                             {link.name}
                                         </Button>
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent>
+                                    <DropdownMenuContent className="bg-gray-900 border border-gray-700 rounded-lg p-2 mt-2 z-50">
                                         {link.dropdownItems.map((item) => (
                                             <DropdownMenuItem key={item.label} asChild>
                                                 <NavLink
@@ -117,7 +117,7 @@ const Navbar: React.FC = () => {
                     </ul>
                 </div>
             </div>
-        </div>
+        </nav>
     )
 }
 
