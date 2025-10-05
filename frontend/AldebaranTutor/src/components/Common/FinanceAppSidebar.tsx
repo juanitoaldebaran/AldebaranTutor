@@ -1,29 +1,25 @@
 import { Sidebar, SidebarContent, SidebarGroup, SidebarMenu, SidebarMenuItem } from "../ui/sidebar";
-import {  Brain, DollarSign, DollarSignIcon, File } from "lucide-react";
+import {  Brain, ChartArea, DollarSign, File } from "lucide-react";
 
 const financeItems = [
     {
         id: "VBA",
         title: "Excel VBA",
-        url: "/learn/finance/excelvba",
-        icon: DollarSign,
+        icon: ChartArea,
     },
     {
         id: "IA",
         title: "Investment Analysis",
-        url: "/learn/finance/investmentanalysis",
-        icon: DollarSignIcon,
+        icon: DollarSign,
     },
     {
         id: "FM",
         title: "Financial Modelling",
-        url: "/learn/finance/financialmodelling",
         icon: File,
     },
     {
         id: "RM",
         title: "Risk Management",
-        url: "/learn/finance/riskmanagement",
         icon: Brain
     }
 ];

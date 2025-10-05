@@ -5,7 +5,6 @@ const tech = [
     {
         id: "DSA",
         title: "Data Structures",
-        url: "/learn/it/dsa",
         icon: Code,
     },
     {
@@ -17,13 +16,11 @@ const tech = [
     {
         id: "AI/ML",
         title: "AI/ML",
-        url: "/learn/it/ai-ml",
         icon: Bot,
     },
     {
         id: "PP",
         title: "Procedural Programming",
-        url: "/learn/it/pp",
         icon: DatabaseZap
     }
 ];
