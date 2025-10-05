@@ -9,10 +9,10 @@
 		<relativePath/>
 	</parent>
 	<groupId>com.juanito.project</groupId>
-	<artifactId>AldebaranAI</artifactId>
+	<artifactId>AldebaranTutor</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>AldebaranAI</name>
-	<description>Aldebaran AI project</description>
+	<name>AldebaranTutor</name>
+	<description>Aldebaran Tutor project</description>
 	<url/>
 	<licenses>
 		<license/>
