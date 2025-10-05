@@ -31,7 +31,7 @@ const navLinks = [
     },
     {
         name: "Chat with AI",
-        pathname: "/ai"
+        pathname: "/ai/chat"
     }
 ];
 
@@ -58,7 +58,7 @@ const Navbar: React.FC = () => {
                                     {user?.email}
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator className="bg-gray-700 h-px" />
-                                <DropdownMenuItem onClick={logout} className="cursor-pointer text-white hover:bg-gray-800 rounded px-2 py-1">
+                                <DropdownMenuItem onClick={logout} className="cursor-pointer text-white hover:bg-indigo-600 rounded px-2 py-1">
                                     <div className="flex gap-2 items-center">
                                         Logout
                                         <LogOut size={16} />
