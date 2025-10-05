@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AldebaranAiApplication {
+public class AldebaranTutorApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AldebaranAiApplication.class, args);
+		SpringApplication.run(AldebaranTutorApplication.class, args);
 	}
 
 }
