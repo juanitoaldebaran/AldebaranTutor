@@ -22,3 +22,9 @@ export interface AIQuizResponse {
     quizJsonResponse: string;
 }
 
+export interface QuizJsonResponse {
+    question: string;
+    options: string[];
+    correctAnswer: string;
+    explanation: string;
+}

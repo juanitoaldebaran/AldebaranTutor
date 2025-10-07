@@ -13,6 +13,7 @@ import Engineering from './pages/Engineering'
 import ITQuiz from './pages/ITQuiz'
 import FinanceQuiz from './pages/FinanceQuiz'
 import EngineeringQuiz from './pages/EngineeringQuiz'
+import Navbar from './components/Common/Navbar'
 
 function App() {
   return (
