@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/quiz")
+@RequestMapping("/quiz")
 public class QuizAIController {
     private static final Logger logger = LoggerFactory.getLogger(QuizAIController.class);
     private final QuizAIService quizAIService;

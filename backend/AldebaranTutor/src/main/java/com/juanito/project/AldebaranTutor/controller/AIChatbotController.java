@@ -7,12 +7,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 @RestController
 @RequestMapping("/ai/chat")
 public class AIChatbotController {
@@ -24,20 +27,28 @@ public class AIChatbotController {
         this.quizAIService = quizAIService;
     }
 
-    @PostMapping("/send")
-    public ResponseEntity<?> sendMessage(@RequestBody ChatRequest chatRequest) {
-        try {
-            logger.info("Received chat message: {}", chatRequest.getChatText());
+    @PostMapping(value = "/send", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<?> sendUnifiedMessage(
+            @RequestPart(value = "chatText", required = false) String chatText,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
 
-            if (chatRequest.getChatText() == null || chatRequest.getChatText().trim().isEmpty()) {
-                return ResponseEntity.badRequest()
-                        .body(createErrorResponse("Message cannot be empty"));
-            }
+        boolean noText = (chatText == null || chatText.trim().isEmpty());
+        boolean noFile = (file == null || file.isEmpty());
+
+        if (noText && noFile) {
+            return ResponseEntity.badRequest().body(createErrorResponse("Message cannot be empty. Send either 'chatText', a 'file', or both."));
+        }
+
+        try {
+            ChatRequest chatRequest = new ChatRequest();
+            chatRequest.setChatText(noText ? null : chatText.trim());
+            chatRequest.setFile(noFile ? null : file);
 
             List<ChatResponse> chatHistory = quizAIService.createChat(chatRequest);
             return ResponseEntity.ok(chatHistory);
+
         } catch (Exception e) {
-            logger.error("Error processing chat message: {}", e.getMessage());
+            logger.error("Error processing chat request: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(createErrorResponse("Failed to process message: " + e.getMessage()));
         }
