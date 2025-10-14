@@ -81,13 +81,11 @@ const Home: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-black">
-            {/*Navbar Section*/}
             <Navbar />
 
-            {/*Hero Section*/}
              <motion.section 
                 id="hero"
-                className="min-h-screen flex items-center mt-10"
+                className="min-h-screen flex items-center mt-18"
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1 }}

@@ -3,13 +3,14 @@ import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import Notification from "./Notification";
 import type { ChatResponse } from "@/types/ai";
-import { Bot, Send, Trash, User } from "lucide-react";
+import { Bot, Paperclip, Send, Trash, User } from "lucide-react";
 
 const AIChatbot: React.FC = () => {
     const [chatMessages, setChatMessages] = useState<ChatResponse[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
     const [inputText, setInputText] = useState("");
+    const [file, setFile] = useState<File | null>(null);
     const {notification, showNotification, hideNotification} = useNotification();
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -59,53 +60,46 @@ const AIChatbot: React.FC = () => {
     }, []);
 
     const sendMessage = async () => {
-        if (!inputText.trim() || isLoading) {
-            return;
-        }
 
-        const userMessage = inputText.trim();
-        setInputText('');
+        if (!inputText.trim() && !file) return;
+
         setIsLoading(true);
         setIsTyping(true);
 
-        const newUserMessage: ChatResponse = {
-            textContent: userMessage,
-            senderType: "USER",
-            createdAt: new Date().getTime(),
-        };
-
-        setChatMessages((prev) => [...prev, newUserMessage]);
-
         try {
+
+            const formData = new FormData();
+            
+            if (inputText.trim()) {
+                formData.append("chatText", inputText.trim());
+            }
+
+            if (file) {
+                formData.append("file", file);
+            }
+
             const response = await fetch("http://localhost:8080/ai/chat/send", {
                 method: "POST",
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chatText: userMessage }), 
+                body: formData
             });
 
             if (response.ok) {
                 const data = await response.json();
                 setChatMessages(data);
             } else {
-                throw new Error("Failed to send message");
+                console.error("Failed to send message. Server returned:", response.status);
             }
+
         } catch (error) {
             console.error("Error sending message", error);
-            showNotification("Failed to send message", "error");
-            
-            const errorMessage: ChatResponse = {
-                textContent: "I'm sorry, I couldn't process your message. Please try again",
-                senderType: "AI",
-                createdAt: new Date().getTime(),
-            };
-            setChatMessages((prev) => [...prev, errorMessage]);
         } finally {
+            setInputText("");
+            setFile(null);
             setIsLoading(false);
             setIsTyping(false);
             inputRef.current?.focus();
         }
     };
-
     const clearChat = async () => {
         if (!window.confirm("Are you sure you want to clear the chat history?")) return;
 
@@ -140,11 +134,19 @@ const AIChatbot: React.FC = () => {
             sendMessage();
         }
     };
+    
+    const handleSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) setFile(file);
+    }
+
+    const triggerFileInput = () => {
+        document.getElementById("fileInput")?.click();
+    };
 
     return (
         <div className="min-h-screen p-4 mt-20">
-            <div className="max-w-6xl mx-auto h-screen flex flex-col">
-                {/* Header Chat */}
+            <div className="max-w-4xl mx-auto h-screen flex flex-col">
                 <div className="bg-white/10 backdrop-blur-lg rounded-t-3xl p-6 border-b-1">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
@@ -175,7 +177,6 @@ const AIChatbot: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Content Chat */}
                 <div className="flex-1 bg-gray-900/50 backdrop-blur-lg overflow-y-auto p-6 space-y-4 rounded-b-xl">
                     {isLoading && chatMessages.length === 0 ? (
                         <div className="flex items-center justify-center h-full">
@@ -198,7 +199,7 @@ const AIChatbot: React.FC = () => {
 
                                     <div
                                         className={`max-w-3xl ${message.senderType === "USER"
-                                            ? "bg-gradient-to-r from-blue-500 to-purple-600"
+                                            ? "bg-blue-500"
                                             : "bg-white/10 border border-white/20"
                                             } rounded-2xl p-4 shadow-lg`}
                                     >
@@ -218,7 +219,6 @@ const AIChatbot: React.FC = () => {
                                 </div>
                             ))}
 
-                            {/* Typing Indicator - MOVED OUTSIDE MAP */}
                             {isTyping && (
                                 <div className="flex gap-3 justify-start">
                                     <div className="flex-shrink-0">
@@ -241,23 +241,38 @@ const AIChatbot: React.FC = () => {
                     )}
                 </div>
 
-                {/* Input Area */}
                 <div className="bg-white/10 backdrop-blur-lg rounded-b-3xl p-6 border-t border-white/10">
-                    <div className="flex gap-3">
-                        <input
-                            ref={inputRef}
-                            type="text"
-                            value={inputText}
-                            onChange={(e) => setInputText(e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            placeholder="Enter your question here...."
-                            disabled={isLoading}
-                            className="w-full text-white py-4 px-6 border-1 rounded-2xl hover:scale-101 duration-200 bg-white/5 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                    <div className="flex gap-3 items-center relative">
+                        <input 
+                                id="fileInput"
+                                type="file"
+                                onChange={handleSelectFile}
+                                className="hidden"
                         />
+                        <div className="relative w-full">
+                            <button
+                            onClick={triggerFileInput}
+                            type="button"
+                            disabled={isLoading}
+                            className="absolute z-10 right-3 top-4 text-white cursor-pointer"
+                            >
+                                <Paperclip />
+                            </button>
+                            <input
+                                ref={inputRef}
+                                type="text"
+                                value={inputText}
+                                onChange={(e) => setInputText(e.target.value)}
+                                onKeyDown={handleKeyDown}
+                                placeholder="Enter your question here...."
+                                disabled={isLoading}
+                                className="w-full text-white py-4 px-6 border-1 rounded-2xl hover:scale-101 duration-200 bg-white/5 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                            />
+                        </div>
                         <button
                             onClick={sendMessage}
                             disabled={isLoading || !inputText.trim()}
-                            className="bg-green-600 px-6 text-white flex items-center gap-2 rounded-2xl hover:bg-green-800 hover:scale-101 duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                            className="bg-green-600 px-6 py-4 text-white flex items-center gap-2 rounded-2xl hover:bg-green-800 hover:scale-101 duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                             <Send />
                             Send
                         </button>
