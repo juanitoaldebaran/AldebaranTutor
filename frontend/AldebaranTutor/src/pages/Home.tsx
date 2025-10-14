@@ -68,7 +68,7 @@ const Home: React.FC = () => {
         }, 
         {
             icon: Trophy,
-            title: "Personalized Learnig Paths",
+            title: "Personalized Learning Paths",
             description: "Customized curriculum based on your goals and current skill levels",
             color: "green"
         }, {
