@@ -6,7 +6,7 @@ The platform integrates **Machine Learning**, **AI Chatbots**, and **Interactive
 ---
 
 ## Live Demo   
-
+https://aldebaran-tutor.vercel.app/ 
 
 ## 🚀 Key Features
 
